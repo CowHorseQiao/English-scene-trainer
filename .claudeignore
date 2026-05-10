@@ -1,0 +1,25 @@
+# Claude Code ignore patterns
+# These files and folders are not needed for project analysis or AI-assisted development.
+
+# Generated/build output
+.next/
+node_modules/
+.dev/
+
+# Local database and environment
+*.db
+dev.db
+.env*
+
+# IDE/editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# System files
+.DS_Store
+
+# Misc
+package-lock.json

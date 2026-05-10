@@ -1,0 +1,97 @@
+export const SAMPLE_IMPORT_JSON = JSON.stringify(
+  {
+    batchTitle: "保研英语面试语料包",
+    source: "AI 生成",
+    materials: [
+      {
+        title: "介绍个人分工（单句）",
+        contentType: "sentence",
+        zh: "我主要负责路径规划算法的实现和可视化。",
+        en: "I was mainly responsible for implementing and visualizing the path planning algorithm.",
+        scene: "保研英语面试",
+        level: "B2",
+        usage: "介绍自己在项目中的分工",
+        note: "responsible for doing sth 是固定搭配",
+        difficulty: 2,
+        variants: [
+          {
+            type: "natural",
+            text: "My main contribution was implementing the path planning algorithm and visualizing the results.",
+            note: "更自然的表达",
+          },
+        ],
+        tags: ["保研面试", "项目经历", "个人分工"],
+      },
+      {
+        title: "面试官与候选人对话",
+        contentType: "dialogue",
+        scene: "保研英语面试",
+        level: "B2",
+        difficulty: 3,
+        tags: ["保研面试", "对话练习", "自我介绍"],
+        segments: [
+          {
+            order: 0,
+            segmentType: "line",
+            speaker: "面试官",
+            en: "Could you briefly introduce yourself and tell us why you are interested in our program?",
+            zh: "请简单介绍一下你自己，并告诉我们你为什么对我们的项目感兴趣？",
+          },
+          {
+            order: 1,
+            segmentType: "line",
+            speaker: "候选人",
+            en: "I'm a senior student majoring in Computer Science. I've been following your lab's research on natural language processing, and I'm particularly interested in how your team applies deep learning to machine translation.",
+            zh: "我是计算机科学专业的大四学生。我一直关注贵实验室在自然语言处理方面的研究，尤其对你们团队如何将深度学习应用于机器翻译非常感兴趣。",
+          },
+          {
+            order: 2,
+            segmentType: "line",
+            speaker: "面试官",
+            en: "That's great to hear. Can you tell us more about the projects you've worked on?",
+            zh: "很高兴听到这个。能详细说说你做过的项目吗？",
+          },
+          {
+            order: 3,
+            segmentType: "line",
+            speaker: "候选人",
+            en: "My most significant project was building a sentiment analysis system. I was responsible for data preprocessing and model training. We achieved 87% accuracy on the test set, which was a 5% improvement over the baseline.",
+            zh: "我最重要的项目是构建了一个情感分析系统。我负责数据预处理和模型训练。我们在测试集上达到了 87% 的准确率，比基线提升了 5%。",
+            note: "achieved...accuracy 是描述模型效果的常用表达",
+          },
+        ],
+      },
+      {
+        title: "自我介绍独白",
+        contentType: "monologue",
+        scene: "保研英语面试",
+        level: "B2-C1",
+        difficulty: 3,
+        tags: ["保研面试", "自我介绍", "独白"],
+        segments: [
+          {
+            order: 0,
+            segmentType: "paragraph",
+            en: "Good morning, professors. Thank you for giving me this opportunity to introduce myself. My name is Li Hua, and I'm a senior student from the School of Computer Science at XYZ University.",
+            zh: "各位教授早上好。感谢你们给我这个机会来介绍自己。我叫李华，是 XYZ 大学计算机学院的大四学生。",
+          },
+          {
+            order: 1,
+            segmentType: "paragraph",
+            en: "During my undergraduate studies, I maintained a GPA of 3.8 out of 4.0, ranking in the top 10% of my class. I've taken advanced courses in algorithms, machine learning, and computer vision, which laid a solid foundation for my research interests.",
+            zh: "在本科期间，我保持了 3.8/4.0 的绩点，排名班级前 10%。我修读了算法、机器学习和计算机视觉等高级课程，这为我的研究兴趣打下了坚实的基础。",
+            note: "ranking in the top X% 是描述排名的地道表达",
+          },
+          {
+            order: 2,
+            segmentType: "paragraph",
+            en: "Beyond coursework, I've been actively involved in research. I spent two semesters in the Intelligent Systems Lab, where I worked on object detection using deep neural networks. This experience taught me how to design experiments, analyze results, and communicate findings effectively.",
+            zh: "除了课程学习，我还积极参与科研。我在智能系统实验室度过了两个学期，期间研究使用深度神经网络进行目标检测。这段经历教会了我如何设计实验、分析结果和有效沟通研究发现。",
+          },
+        ],
+      },
+    ],
+  },
+  null,
+  2,
+);

@@ -1,0 +1,219 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  parentId    String?
+  name        String
+  description String?
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  parent    Category?  @relation("CategoryTree", fields: [parentId], references: [id], onDelete: Restrict)
+  children  Category[] @relation("CategoryTree")
+  materials Material[]
+
+  @@index([parentId])
+}
+
+model Material {
+  id          String   @id @default(cuid())
+  categoryId  String
+  title       String
+  zh          String
+  en          String
+  contentType String   @default("sentence")
+  scene       String?
+  level       String?
+  note        String?
+  usage       String?
+  difficulty  Int      @default(1)
+  isArchived  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  category        Category          @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  variants        MaterialVariant[]
+  tags            MaterialTag[]
+  favorites       Favorite[]
+  trainingRecords   TrainingRecord[]
+  practiceSessions  PracticeSession[]
+  segments          MaterialSegment[]
+
+  @@index([categoryId])
+  @@index([createdAt])
+}
+
+model MaterialVariant {
+  id         String   @id @default(cuid())
+  materialId String
+  type       String
+  text       String
+  note       String?
+  createdAt  DateTime @default(now())
+
+  material Material @relation(fields: [materialId], references: [id], onDelete: Cascade)
+
+  @@index([materialId])
+}
+
+model MaterialSegment {
+  id          String   @id @default(cuid())
+  materialId  String
+  order       Int
+  segmentType String   @default("paragraph")
+  zh          String
+  en          String
+  speaker     String?
+  note        String?
+  createdAt   DateTime @default(now())
+
+  material Material @relation(fields: [materialId], references: [id], onDelete: Cascade)
+
+  @@index([materialId])
+}
+
+model Tag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+
+  materials MaterialTag[]
+}
+
+model MaterialTag {
+  id         String @id @default(cuid())
+  materialId String
+  tagId      String
+
+  material Material @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  tag      Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([materialId, tagId])
+}
+
+model Favorite {
+  id             String    @id @default(cuid())
+  materialId      String?
+  text           String
+  type           String
+  meaning        String?
+  note           String?
+  sourceSentence String?
+  reviewStage    Int       @default(0)
+  mastery        Int       @default(0)
+  nextReviewAt   DateTime  @default(now())
+  lastReviewAt   DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  material   Material?   @relation(fields: [materialId], references: [id], onDelete: SetNull)
+  reviewLogs ReviewLog[]
+
+  @@index([nextReviewAt])
+  @@index([type])
+}
+
+model ReviewLog {
+  id         String   @id @default(cuid())
+  favoriteId String
+  result     String
+  createdAt  DateTime @default(now())
+
+  favorite Favorite @relation(fields: [favoriteId], references: [id], onDelete: Cascade)
+
+  @@index([favoriteId])
+}
+
+model TrainingRecord {
+  id              String   @id @default(cuid())
+  materialId       String
+  type            String
+  prompt          String
+  userAnswer      String?
+  referenceAnswer String
+  isCorrect       Boolean?
+  selfRating      String?
+  createdAt       DateTime @default(now())
+
+  material Material @relation(fields: [materialId], references: [id], onDelete: Cascade)
+
+  @@index([materialId])
+  @@index([type])
+  @@index([createdAt])
+}
+
+model PracticeSession {
+  id           String   @id @default(cuid())
+  materialId   String
+  mode         String   @default("cloze")
+  status       String   @default("in_progress")
+  totalCount   Int      @default(0)
+  correctCount Int      @default(0)
+  startedAt    DateTime @default(now())
+  completedAt  DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  material Material          @relation(fields: [materialId], references: [id], onDelete: Cascade)
+  answers  PracticeAnswer[]
+
+  @@index([materialId])
+  @@index([status])
+}
+
+model PracticeAnswer {
+  id              String   @id @default(cuid())
+  sessionId       String
+  exerciseIndex   Int
+  type            String
+  prompt          String
+  userAnswer      String?
+  referenceAnswer String
+  isCorrect       Boolean?
+  selfRating      String?
+  aiScore         Int?
+  aiFeedback      String?
+  createdAt       DateTime @default(now())
+
+  session PracticeSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+}
+
+model PracticeExerciseCache {
+  id         String   @id @default(cuid())
+  materialId String
+  mode       String
+  exercises  String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([materialId, mode])
+  @@index([materialId])
+}
+
+model ImportBatch {
+  id         String   @id @default(cuid())
+  categoryId String
+  title      String?
+  source     String?
+  rawJson    String
+  itemCount  Int
+  createdAt  DateTime @default(now())
+
+  @@index([categoryId])
+  @@index([createdAt])
+}
+
+model AppSetting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
