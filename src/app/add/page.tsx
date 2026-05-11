@@ -3,6 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getCategoriesTree } from "@/features/categories/queries";
 import { GenerateForm } from "@/features/ai/generate-form";
 import { ImportJsonForm } from "@/features/importer/import-json-form";
+import { DailyMaterialsTab } from "@/features/daily-materials/daily-materials-tab";
 import type { CategorySelectOption } from "@/features/importer/types";
 
 async function getFlatCategoryOptions(): Promise<CategorySelectOption[]> {
@@ -52,26 +53,37 @@ export default async function AddPage() {
         </p>
       </section>
 
-      {noCategories ? (
-        <div className="rounded-lg border p-6 text-sm text-muted-foreground">
-          还没有分类。请先创建至少一个分类，然后添加语料。
-        </div>
-      ) : (
-        <Tabs defaultValue="generate">
-          <TabsList className="mb-4">
-            <TabsTrigger value="generate">AI 生成</TabsTrigger>
-            <TabsTrigger value="import">JSON 导入</TabsTrigger>
-          </TabsList>
+      <Tabs defaultValue="generate">
+        <TabsList className="mb-4 flex h-auto min-h-10 flex-wrap items-center gap-1">
+          <TabsTrigger value="generate">AI 生成</TabsTrigger>
+          <TabsTrigger value="import">JSON 导入</TabsTrigger>
+          <TabsTrigger value="daily">每日语料</TabsTrigger>
+        </TabsList>
 
-          <TabsContent value="generate">
+        <TabsContent value="generate">
+          {noCategories ? (
+            <div className="rounded-xl border p-6 text-sm text-muted-foreground">
+              还没有分类。请先创建至少一个分类，然后添加语料。
+            </div>
+          ) : (
             <GenerateForm categories={treeCategories} />
-          </TabsContent>
+          )}
+        </TabsContent>
 
-          <TabsContent value="import">
+        <TabsContent value="import">
+          {noCategories ? (
+            <div className="rounded-xl border p-6 text-sm text-muted-foreground">
+              还没有分类。请先创建至少一个分类，然后导入语料。
+            </div>
+          ) : (
             <ImportJsonForm categories={flatCategories} />
-          </TabsContent>
-        </Tabs>
-      )}
+          )}
+        </TabsContent>
+
+        <TabsContent value="daily">
+          <DailyMaterialsTab />
+        </TabsContent>
+      </Tabs>
     </main>
   );
 }

@@ -217,3 +217,54 @@ model AppSetting {
   value     String
   updatedAt DateTime @updatedAt
 }
+
+model DailyGenerationSetting {
+  id                   String   @id @default(cuid())
+  enabled              Boolean  @default(false)
+  generateTime         String?
+  totalCount           Int      @default(2)
+  dialogueCount        Int      @default(1)
+  monologueCount       Int      @default(0)
+  interviewCount       Int      @default(1)
+  articleCount         Int      @default(0)
+  ieltsCount           Int      @default(0)
+  allowSuggestCategory Boolean  @default(true)
+  autoImport           Boolean  @default(false)
+  maxPendingDrafts     Int      @default(10)
+  learningGoal         String?
+  focusNote            String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+model DailyGenerationBatch {
+  id                      String                        @id @default(cuid())
+  status                  String                        @default("pending")
+  reason                  String?
+  planJson                String?
+  error                   String?
+  pendingDraftCountBefore Int?
+  createdAt               DateTime                      @default(now())
+  updatedAt               DateTime                      @updatedAt
+  drafts                  DailyGeneratedMaterialDraft[]
+
+  @@index([createdAt])
+  @@index([status])
+}
+
+model DailyGeneratedMaterialDraft {
+  id               String               @id @default(cuid())
+  batchId          String
+  title            String
+  contentType      String?
+  categoryPathJson String?
+  contentJson      String
+  status           String               @default("pending")
+  materialId       String?
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+  batch            DailyGenerationBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@index([createdAt])
+}
